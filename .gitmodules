@@ -1,0 +1,3 @@
+[submodule "eip_device_ext/OpENer"]
+	path = eip_device_ext/OpENer
+	url = https://github.com/EIPStackGroup/OpENer.git
