@@ -15,13 +15,13 @@
 #include <limits.h>
 #endif
 
-#include "generic_networkhandler.h"
+#include "ports/generic_networkhandler.h"
 #include "opener_api.h"
-#include "cipcommon.h"
+#include "cip/cipcommon.h"
 #include "trace.h"
-#include "networkconfig.h"
-#include "doublylinkedlist.h"
-#include "cipconnectionobject.h"
+#include "ports/POSIX/networkconfig.h"
+#include "utils/doublylinkedlist.h"
+#include "cip/cipconnectionobject.h"
 
 /******************************************************************************/
 /** @brief Signal handler function for ending stack execution
