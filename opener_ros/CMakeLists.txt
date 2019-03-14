@@ -20,6 +20,12 @@ set(CMAKE_INSTALL_LIBDIR ${CATKIN_PACKAGE_LIB_DESTINATION})
 
 add_subdirectory(OpENer/source)
 
+configure_file(
+    "${PROJECT_SOURCE_DIR}/OpENer/bin/posix/src/ports/devicedata.h"
+    "${CATKIN_PACKAGE_INCLUDE_DESTINATION}/ports/devicedata.h"
+    COPYONLY
+    )
+
 # TODO add headers/libs to INSTALL_DIR
 install(FILES package.xml DESTINATION share/opener_ros)
 

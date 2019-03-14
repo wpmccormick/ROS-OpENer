@@ -6,12 +6,8 @@ find_package(catkin REQUIRED
     opener_ros
   )
 
-#find_path( OpENer_BUILDSUPPORT_DIR OpENer.cmake ../opener_ros/OpENer/source/buildsupport )
-#INCLUDE( ${OpENer_BUILDSUPPORT_DIR}/OpENer.cmake )
-#opener_common_includes()
-
-# add_definitions(-std=c++11)
-
+#add_definitions(-std=c++11)
+# TODO: Figure out how to not use the hard-coded path for OpENer C source files
 set( PLATFORM_SPEC_SRC
   src/sampleapplication.c
   ../opener_ros/OpENer/source/src/ports/POSIX/networkhandler.c
@@ -22,18 +18,23 @@ set( PLATFORM_SPEC_SRC
 catkin_package(
   INCLUDE_DIRS
     include
+    include/eip_device
   LIBRARIES
     ${PROJECT_NAME}
   CATKIN_DEPENDS
     opener_ros
   )
 
-include_directories(include
+include_directories(include include/eip_device
   ${catkin_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS}/cip
+  ${catkin_INCLUDE_DIRS}/ports
+  ${catkin_INCLUDE_DIRS}/ports/POSIX
+  ${catkin_INCLUDE_DIRS}/utils
+  ${catkin_INCLUDE_DIRS}/enet_encap
 )
 
-# add_library( TESTING ${PLATFORM_SPEC_SRC} )
+add_executable(eip_device src/main.c)
 
-add_executable(OpENer_Test src/main.c)
-
-target_link_libraries( OpENer_Test CIP Utils ENET_ENCAP PLATFORM_GENERIC rt cap pthread)
+#target_link_libraries( OpENer_Test ${catkin_LIBRARIES} ${PROJECT_NAME} CIP Utils ENET_ENCAP PLATFORM_GENERIC rt cap pthread)
+#target_link_libraries( OpENer_Test ${catkin_LIBRARIES} ${PROJECT_NAME} )
