@@ -1,3 +1,3 @@
-[submodule "eip_device_ext/opener_ros/OpENer"]
-	path = eip_device_ext/opener_ros/OpENer
+[submodule "opener_ros/OpENer"]
+	path = opener_ros/OpENer
 	url = https://github.com/EIPStackGroup/OpENer.git

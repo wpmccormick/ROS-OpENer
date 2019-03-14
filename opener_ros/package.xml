@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>OpENer</name>
-  <version>0.1.0</version>
+  <name>opener_ros</name>
+  <version>2.2.1</version>
   <description>The OpENer Catkin Package</description>
   <maintainer email="wmccormick@swri.org">Bill McCormick</maintainer>
   <license>BSD</license>
