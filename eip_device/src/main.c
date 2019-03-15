@@ -15,13 +15,13 @@
 #include <limits.h>
 #endif
 
-#include <generic_networkhandler.h>
-#include "opener_api.h"
-#include "cipcommon.h"
-#include "trace.h"
-#include "networkconfig.h"
-#include "doublylinkedlist.h"
-#include "cipconnectionobject.h"
+#include "opener_ros/ports/generic_networkhandler.h"
+#include "opener_ros/opener_api.h"
+#include "opener_ros/cip/cipcommon.h"
+#include "opener_ros/trace.h"
+#include "opener_ros/ports/POSIX/networkconfig.h"
+#include "opener_ros/utils/doublylinkedlist.h"
+#include "opener_ros/cip/cipconnectionobject.h"
 
 /******************************************************************************/
 /** @brief Signal handler function for ending stack execution

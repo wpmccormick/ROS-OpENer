@@ -1,40 +1,29 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(eip_device)
 
-find_package(catkin REQUIRED
-  COMPONENTS
-    opener_ros
-  )
+add_definitions(-std=c++11)
 
-#add_definitions(-std=c++11)
-# TODO: Figure out how to not use the hard-coded path for OpENer C source files
-set( PLATFORM_SPEC_SRC
-  src/sampleapplication.c
-  ../opener_ros/OpENer/source/src/ports/POSIX/networkhandler.c
-  ../opener_ros/OpENer/source/src/ports/POSIX/opener_error.c
-  ../opener_ros/OpENer/source/src/ports/POSIX/networkconfig.c
-  )
+#set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c++11 -std=c99 -Werror=implicit-function-declaration" )
+#add_definitions( -D_POSIX_C_SOURCE=200112L -D__USE_GNU -D__USE_XOPEN2K -DOPENER_POSIX)
+
+# TODO: Which of these do we really need?
+#add_definitions(-DRESTRICT=)
+#add_definitions(-DRESTRICT=restrict)
+
+find_package(catkin REQUIRED COMPONENTS opener_ros roscpp)
 
 catkin_package(
-  INCLUDE_DIRS
-    include
-    include/eip_device
-  LIBRARIES
-    ${PROJECT_NAME}
-  CATKIN_DEPENDS
-    opener_ros
+  INCLUDE_DIRS include include/eip_device
+  CATKIN_DEPENDS opener_ros roscpp
+  LIBRARIES lib
   )
 
-include_directories(include include/eip_device
-  ${catkin_INCLUDE_DIRS}
-  ${catkin_INCLUDE_DIRS}/cip
-  ${catkin_INCLUDE_DIRS}/ports
-  ${catkin_INCLUDE_DIRS}/ports/POSIX
-  ${catkin_INCLUDE_DIRS}/utils
-  ${catkin_INCLUDE_DIRS}/enet_encap
-)
+include_directories(include include/eip_device ${catkin_INCLUDE_DIRS})
 
-add_executable(eip_device src/main.c)
+add_executable(eip_device src/eip_device.cpp)
 
-#target_link_libraries( OpENer_Test ${catkin_LIBRARIES} ${PROJECT_NAME} CIP Utils ENET_ENCAP PLATFORM_GENERIC rt cap pthread)
-#target_link_libraries( OpENer_Test ${catkin_LIBRARIES} ${PROJECT_NAME} )
+target_link_libraries(
+  eip_device
+  ${catkin_LIBRARIES}
+  rt cap pthread
+  )

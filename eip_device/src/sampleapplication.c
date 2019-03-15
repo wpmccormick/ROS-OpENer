@@ -8,10 +8,10 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#include "opener_api.h"
-#include "cip/appcontype.h"
-#include "trace.h"
-#include "cip/cipidentity.h"
+#include "opener_ros/opener_api.h"
+#include "opener_ros/cip/appcontype.h"
+#include "opener_ros/trace.h"
+#include "opener_ros/cip/cipidentity.h"
 
 #define DEMO_APP_INPUT_ASSEMBLY_NUM                100 //0x064
 #define DEMO_APP_OUTPUT_ASSEMBLY_NUM               150 //0x096
