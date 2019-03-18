@@ -27,10 +27,10 @@
 #include <sys/select.h>
 #include <assert.h>
 
-#include "typedefs.h"
+#include "opener_ros/typedefs.h"
 
 /** @brief Identity configuration of the device */
-#include "devicedata.h"
+#include "opener_ros/ports/devicedata.h"
 
 /** @brief Define the number of objects that may be used in connections
  *

@@ -9,8 +9,8 @@
 #include <stdbool.h>
 
 #include "opener_ros/opener_api.h"
-#include "opener_ros/cip/appcontype.h"
 #include "opener_ros/trace.h"
+#include "opener_ros/cip/appcontype.h"
 #include "opener_ros/cip/cipidentity.h"
 
 #define DEMO_APP_INPUT_ASSEMBLY_NUM                100 //0x064
