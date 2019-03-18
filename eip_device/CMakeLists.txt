@@ -35,7 +35,7 @@ include_directories(
   )
 
 
-add_executable(eip_device src/eip_device.cpp src/sampleapplication.c)
+add_executable(eip_device src/eip_device_node.cpp src/eip_device_application.c)
 
 target_link_libraries(
   eip_device

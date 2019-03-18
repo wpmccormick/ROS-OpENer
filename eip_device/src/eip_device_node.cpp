@@ -1,27 +1,13 @@
-/*******************************************************************************
- * Copyright (c) 2009, Rockwell Automation, Inc.
- * All rights reserved.
- *
- ******************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
 #include <sys/capability.h>
+#include <sys/capability.h>
 
-#ifdef OPENER_RT
-#include <pthread.h>
-#include <sys/mman.h>
-#include <sched.h>
-#include <limits.h>
-#endif
 
-#include "opener_ros/ports/generic_networkhandler.h"
-#include "opener_ros/opener_api.h"
-#include "opener_ros/cip/cipcommon.h"
-#include "opener_ros/trace.h"
-#include "opener_ros/ports/POSIX/networkconfig.h"
-#include "opener_ros/utils/doublylinkedlist.h"
-#include "opener_ros/cip/cipconnectionobject.h"
+#include <ros/ros.h>
+
+#include "eip_device.h"
 
 /******************************************************************************/
 /** @brief Signal handler function for ending stack execution
@@ -35,17 +21,15 @@ void LeaveStack(int signal);
  *
  * @param signal the signal we received
  */
-void *executeEventLoop(
-  );
+void *executeEventLoop();
 
 /*****************************************************************************/
 /** @brief Flag indicating if the stack should end its execution
  */
 int g_end_stack = 0;
 
-/******************************************************************************/
-int main(int argc,
-         char *arg[]) {
+int main(int argc, char **argv)
+{
 
   cap_t capabilities;
   cap_value_t capabilies_list[1];
@@ -87,14 +71,14 @@ int main(int argc,
                                CipConnectionObjectListArrayAllocator,
                                CipConnectionObjectListArrayFree);
     /* fetch Internet address info from the platform */
-    if (kEipStatusError == ConfigureNetworkInterface(arg[1]) ) {
-      printf("Network interface %s not found.\n", arg[1]);
+    if (kEipStatusError == ConfigureNetworkInterface(argv[1]) ) {
+      printf("Network interface %s not found.\n", argv[1]);
       exit(0);
     }
     ConfigureDomainName();
     ConfigureHostName();
 
-    ConfigureMacAddress(arg[1]);
+    ConfigureMacAddress(argv[1]);
   }
 
   /* for a real device the serial number should be unique per device */
@@ -108,73 +92,15 @@ int main(int argc,
   /* Setup the CIP Layer */
   CipStackInit(unique_connection_id);
 
+  ros::init(argc, argv, "eip_device_node");
+  ros::NodeHandle nh;
+
+  ROS_INFO("Hello world!");
+
   /* Setup Network Handles */
   if (kEipStatusOk == NetworkHandlerInitialize() ) {
     g_end_stack = 0;
-#ifndef WIN32
-    /* register for closing signals so that we can trigger the stack to end */
-    signal(SIGHUP, LeaveStack);
-#endif
-#ifdef OPENER_RT
-    /* Memory lock all*/
-    if (mlockall(MCL_CURRENT | MCL_FUTURE) == -1) {
-      OPENER_TRACE_ERR("mlockall failed: %m\n");
-      exit(-2);
-    }
-
-    struct sched_param param;
-    pthread_attr_t attr;
-    pthread_t thread;
-    CipUint ret = pthread_attr_init(&attr);
-    if (ret) {
-      OPENER_TRACE_ERR("init pthread attributes failed\n");
-      exit(-2);
-    }
-
-    /* Set stack size  */
-    ret = pthread_attr_setstacksize(&attr,
-                                    PTHREAD_STACK_MIN + OPENER_RT_THREAD_SIZE);
-    if (ret) {
-      OPENER_TRACE_ERR("setstacksize failed\n");
-      exit(-2);
-    }
-
-    /* Set policy and priority of the thread */
-    ret = pthread_attr_setschedpolicy(&attr, SCHED_RR);
-    if (ret) {
-      OPENER_TRACE_ERR("setschedpolicy failed\n");
-      exit(-2);
-    }
-    param.sched_priority = 80;
-    ret = pthread_attr_setschedparam(&attr, &param);
-    if (ret) {
-      OPENER_TRACE_ERR("pthread setschedparam failed\n");
-      exit(-2);
-    }
-    /* scheduling parameters */
-    ret = pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);
-    if (ret) {
-      OPENER_TRACE_ERR("setinheritsched failed\n");
-      exit(-2);
-    }
-
-    /* Create a thread with the specified attributes */
-    ret = pthread_create(&thread, &attr, executeEventLoop, NULL);
-    if (ret) {
-      OPENER_TRACE_ERR("create pthread failed\n");
-      exit(-2);
-    }
-
-    /* Join the thread */
-    ret = pthread_join(thread, NULL);
-    if (ret) {
-      OPENER_TRACE_ERR("join pthread failed: %m\n");
-    }
-    /* Unlock memory */
-    munlockall();
-#else
     executeEventLoop();
-#endif
     /* clean up network state */
     NetworkHandlerFinish();
   }
