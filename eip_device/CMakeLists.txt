@@ -34,7 +34,6 @@ include_directories(
   ${opener_ros_INSTALL_PREFIX}/include/opener_ros/utils  
   )
 
-
 add_executable(eip_device src/eip_device_node.cpp src/eip_device_application.c)
 
 target_link_libraries(

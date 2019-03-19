@@ -30,7 +30,7 @@
 #include "opener_ros/typedefs.h"
 
 /** @brief Identity configuration of the device */
-#include "opener_ros/ports/devicedata.h"
+#include "devicedata.h"
 
 /** @brief Define the number of objects that may be used in connections
  *
