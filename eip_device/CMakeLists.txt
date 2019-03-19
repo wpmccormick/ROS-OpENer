@@ -34,10 +34,27 @@ include_directories(
   ${opener_ros_INSTALL_PREFIX}/include/opener_ros/utils  
   )
 
-add_executable(eip_device src/eip_device_node.cpp src/eip_device_application.c)
+add_executable(eip_device_node src/eip_device_node.cpp src/eip_device_application.c)
 
 target_link_libraries(
-  eip_device
+  eip_device_node
   ${catkin_LIBRARIES}
   rt cap pthread
   )
+
+add_dependencies(
+    eip_device_node
+    ${${PROJECT_NAME}_EXPORTED_TARGETS}
+    ${catkin_EXPORTED_TARGETS}
+)
+
+## Mark executables and libraries for installation
+install(TARGETS eip_device_node
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+install(DIRECTORY include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+

@@ -24,10 +24,4 @@ add_subdirectory(OpENer/source)
 # TODO add headers/libs to INSTALL_DIR
 install(FILES package.xml DESTINATION share/opener_ros)
 
-#install(TARGETS PLATFORM
-#  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#  RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#)
-
 
