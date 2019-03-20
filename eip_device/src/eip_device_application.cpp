@@ -15,12 +15,12 @@ extern "C" {
   #include "cipidentity.h"
 }
 
-#define DEMO_APP_INPUT_ASSEMBLY_NUM                100 //0x064
-#define DEMO_APP_OUTPUT_ASSEMBLY_NUM               150 //0x096
-#define DEMO_APP_CONFIG_ASSEMBLY_NUM               151 //0x097
-#define DEMO_APP_HEARTBEAT_INPUT_ONLY_ASSEMBLY_NUM  152 //0x098
-#define DEMO_APP_HEARTBEAT_LISTEN_ONLY_ASSEMBLY_NUM 153 //0x099
-#define DEMO_APP_EXPLICT_ASSEMBLY_NUM              154 //0x09A
+#define INPUT_ASSEMBLY_NUM                100 //0x064
+#define OUTPUT_ASSEMBLY_NUM               150 //0x096
+#define CONFIG_ASSEMBLY_NUM               151 //0x097
+#define HEARTBEAT_INPUT_ONLY_ASSEMBLY_NUM  152 //0x098
+#define HEARTBEAT_LISTEN_ONLY_ASSEMBLY_NUM 153 //0x099
+#define EXPLICT_ASSEMBLY_NUM              154 //0x09A
 
 /* global variables for demo application (4 assembly data fields)  ************/
 
@@ -34,38 +34,38 @@ EipUint8 g_assembly_data09A[32]; /* Explicit */
 EipStatus ApplicationInitialization(void) {
   /* create 3 assembly object instances*/
   /*INPUT*/
-  CreateAssemblyObject( DEMO_APP_INPUT_ASSEMBLY_NUM, g_assembly_data064,
+  CreateAssemblyObject( INPUT_ASSEMBLY_NUM, g_assembly_data064,
                         sizeof(g_assembly_data064) );
 
   /*OUTPUT*/
-  CreateAssemblyObject( DEMO_APP_OUTPUT_ASSEMBLY_NUM, g_assembly_data096,
+  CreateAssemblyObject( OUTPUT_ASSEMBLY_NUM, g_assembly_data096,
                         sizeof(g_assembly_data096) );
 
   /*CONFIG*/
-  CreateAssemblyObject( DEMO_APP_CONFIG_ASSEMBLY_NUM, g_assembly_data097,
+  CreateAssemblyObject( CONFIG_ASSEMBLY_NUM, g_assembly_data097,
                         sizeof(g_assembly_data097) );
 
   /*Heart-beat output assembly for Input only connections */
-  CreateAssemblyObject(DEMO_APP_HEARTBEAT_INPUT_ONLY_ASSEMBLY_NUM, NULL, 0);
+  CreateAssemblyObject(HEARTBEAT_INPUT_ONLY_ASSEMBLY_NUM, NULL, 0);
 
   /*Heart-beat output assembly for Listen only connections */
-  CreateAssemblyObject(DEMO_APP_HEARTBEAT_LISTEN_ONLY_ASSEMBLY_NUM, NULL, 0);
+  CreateAssemblyObject(HEARTBEAT_LISTEN_ONLY_ASSEMBLY_NUM, NULL, 0);
 
   /* assembly for explicit messaging */
-  CreateAssemblyObject( DEMO_APP_EXPLICT_ASSEMBLY_NUM, g_assembly_data09A,
+  CreateAssemblyObject( EXPLICT_ASSEMBLY_NUM, g_assembly_data09A,
                         sizeof(g_assembly_data09A) );
 
-  ConfigureExclusiveOwnerConnectionPoint(0, DEMO_APP_OUTPUT_ASSEMBLY_NUM,
-                                         DEMO_APP_INPUT_ASSEMBLY_NUM,
-                                         DEMO_APP_CONFIG_ASSEMBLY_NUM);
+  ConfigureExclusiveOwnerConnectionPoint(0, OUTPUT_ASSEMBLY_NUM,
+                                         INPUT_ASSEMBLY_NUM,
+                                         CONFIG_ASSEMBLY_NUM);
   ConfigureInputOnlyConnectionPoint(0,
-                                    DEMO_APP_HEARTBEAT_INPUT_ONLY_ASSEMBLY_NUM,
-                                    DEMO_APP_INPUT_ASSEMBLY_NUM,
-                                    DEMO_APP_CONFIG_ASSEMBLY_NUM);
+                                    HEARTBEAT_INPUT_ONLY_ASSEMBLY_NUM,
+                                    INPUT_ASSEMBLY_NUM,
+                                    CONFIG_ASSEMBLY_NUM);
   ConfigureListenOnlyConnectionPoint(0,
-                                     DEMO_APP_HEARTBEAT_LISTEN_ONLY_ASSEMBLY_NUM,
-                                     DEMO_APP_INPUT_ASSEMBLY_NUM,
-                                     DEMO_APP_CONFIG_ASSEMBLY_NUM);
+                                     HEARTBEAT_LISTEN_ONLY_ASSEMBLY_NUM,
+                                     INPUT_ASSEMBLY_NUM,
+                                     CONFIG_ASSEMBLY_NUM);
 
   return kEipStatusOk;
 }
@@ -89,17 +89,18 @@ EipStatus AfterAssemblyDataReceived(CipInstance *instance) {
 
   /*handle the data received e.g., update outputs of the device */
   switch (instance->instance_number) {
-    case DEMO_APP_OUTPUT_ASSEMBLY_NUM:
+    case OUTPUT_ASSEMBLY_NUM:
       /* Data for the output assembly has been received.
        * Mirror it to the inputs */
-      memcpy( &g_assembly_data064[0], &g_assembly_data096[0],
-              sizeof(g_assembly_data064) );
+      //memcpy( &g_assembly_data064[0], &g_assembly_data096[0],
+      //        sizeof(g_assembly_data064) );
+      //Publish plc_raw_data
       break;
-    case DEMO_APP_EXPLICT_ASSEMBLY_NUM:
+    case EXPLICT_ASSEMBLY_NUM:
       /* do something interesting with the new data from
        * the explicit set-data-attribute message */
       break;
-    case DEMO_APP_CONFIG_ASSEMBLY_NUM:
+    case CONFIG_ASSEMBLY_NUM:
       /* Add here code to handle configuration data and check if it is ok
        * The demo application does not handle config data.
        * However in order to pass the test we accept any data given.
@@ -122,7 +123,7 @@ EipBool8 BeforeAssemblyDataSend(CipInstance *pa_pstInstance) {
    * the data is new.
    */
 
-  if (pa_pstInstance->instance_number == DEMO_APP_EXPLICT_ASSEMBLY_NUM) {
+  if (pa_pstInstance->instance_number == EXPLICT_ASSEMBLY_NUM) {
     /* do something interesting with the existing data
      * for the explicit get-data-attribute message */
   }

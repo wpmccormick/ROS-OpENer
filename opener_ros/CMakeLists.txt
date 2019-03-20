@@ -23,5 +23,3 @@ add_subdirectory(OpENer/source)
 
 # TODO add headers/libs to INSTALL_DIR
 install(FILES package.xml DESTINATION share/opener_ros)
-
-

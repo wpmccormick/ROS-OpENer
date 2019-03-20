@@ -3,14 +3,21 @@ project(eip_device)
 
 add_definitions(-std=c++11)
 
-# TODO: Which of these do we really need?
 add_definitions(-DRESTRICT=)
 
-find_package(catkin REQUIRED COMPONENTS opener_ros roscpp)
+find_package(catkin REQUIRED COMPONENTS opener_ros roscpp message_generation)
+
+add_message_files(
+  FILES
+  EipDataFmPLC.msg
+  EipDataToPLC.msg
+)
+
+generate_messages()
 
 catkin_package(
-  INCLUDE_DIRS include 
-    include/eip_device 
+  INCLUDE_DIRS
+    include
     ${catkin_INCLUDE_DIRS}
     ${opener_ros_INSTALL_PREFIX}/include/opener_ros  
     ${opener_ros_INSTALL_PREFIX}/include/opener_ros/cip  
@@ -18,13 +25,13 @@ catkin_package(
     ${opener_ros_INSTALL_PREFIX}/include/opener_ros/ports  
     ${opener_ros_INSTALL_PREFIX}/include/opener_ros/ports/POSIX  
     ${opener_ros_INSTALL_PREFIX}/include/opener_ros/utils  
-  CATKIN_DEPENDS opener_ros roscpp
-  LIBRARIES lib
+  CATKIN_DEPENDS opener_ros roscpp message_runtime
+  LIBRARIES eip_device
   )
 
 include_directories(
   include 
-  include/eip_device 
+  include/eip_device
   ${catkin_INCLUDE_DIRS}
   ${opener_ros_INSTALL_PREFIX}/include/opener_ros  
   ${opener_ros_INSTALL_PREFIX}/include/opener_ros/cip  
@@ -34,10 +41,20 @@ include_directories(
   ${opener_ros_INSTALL_PREFIX}/include/opener_ros/utils  
   )
 
-add_executable(eip_device_node src/eip_device_node.cpp src/eip_device_application.cpp)
+add_library(eip_device src/eip_device.cpp)
+target_link_libraries(eip_device
+  ${catkin_LIBRARIES}
+)
+add_dependencies(
+    eip_device
+    ${${PROJECT_NAME}_EXPORTED_TARGETS}
+    ${catkin_EXPORTED_TARGETS}
+)
 
-target_link_libraries(
-  eip_device_node
+
+add_executable(eip_device_node src/eip_device_node.cpp src/eip_device_application.cpp)
+target_link_libraries(eip_device_node
+  eip_device
   ${catkin_LIBRARIES}
   rt cap pthread
   )
@@ -49,7 +66,7 @@ add_dependencies(
 )
 
 ## Mark executables and libraries for installation
-install(TARGETS eip_device_node
+install(TARGETS eip_device eip_device_node
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

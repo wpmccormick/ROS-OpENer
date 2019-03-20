@@ -9,12 +9,6 @@
 
 #include "eip_device.h"
 
-extern EipUint8 g_assembly_data064[32]; /* Input */
-extern EipUint8 g_assembly_data096[32]; /* Output */
-extern EipUint8 g_assembly_data097[10]; /* Config */
-extern EipUint8 g_assembly_data09A[32]; /* Explicit */
-
-
 /******************************************************************************/
 /** @brief Signal handler function for ending stack execution
  *
@@ -58,6 +52,8 @@ int main(int argc, char **argv)
   nh.param<std::string>("device", device, "eth0");
   ROS_INFO_STREAM("Using Ethernet device: " << device);
 
+
+  EipDevice eipDevice;
 
   ROS_INFO("Getting Ethernet port capabilities");
 
@@ -119,6 +115,12 @@ int main(int argc, char **argv)
     exit(0);
   }
 
+  //a topic to publish to for data FROM the PLC
+  ros::Publisher eip_data_pub = nh.advertise<eip_device::EipDataFmPLC>("eip_data_fmplc", 1);
+
+  //a top to subcribe to for data TO the PLC
+  ros::Subscriber eip_data_sub = nh.subscribe("eip_data_toplc", 1, &EipDevice::toplcCallback, &eipDevice);
+
   ROS_INFO("Starting Process Loop");
   int EipStatus = kEipStatusOk;
 
@@ -132,6 +134,12 @@ int main(int argc, char **argv)
       ROS_ERROR_STREAM("Error in NetworkHandler loop! Exiting eip_device! -- " << EipStatus );
       break;
     }
+
+    //copy data from the output assembly array to the message topic
+    eipDevice.data_fmplc.raw_plc_data.assign(g_assembly_data096, g_assembly_data096 + 32);
+
+    //and publish
+    eip_data_pub.publish(eipDevice.data_fmplc);
 
     ros::spinOnce();
 
