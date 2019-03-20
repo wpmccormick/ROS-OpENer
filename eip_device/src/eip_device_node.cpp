@@ -9,6 +9,12 @@
 
 #include "eip_device.h"
 
+extern EipUint8 g_assembly_data064[32]; /* Input */
+extern EipUint8 g_assembly_data096[32]; /* Output */
+extern EipUint8 g_assembly_data097[10]; /* Config */
+extern EipUint8 g_assembly_data09A[32]; /* Explicit */
+
+
 /******************************************************************************/
 /** @brief Signal handler function for ending stack execution
  *
