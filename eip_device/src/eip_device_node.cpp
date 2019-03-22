@@ -4,11 +4,26 @@
 #include <sys/capability.h>
 #include <sys/capability.h>
 
+extern "C" {
+  #include "opener_ros/trace.h"
+  #include "opener_ros/opener_api.h"
+  #include "opener_ros/cip/cipcommon.h"
+  #include "opener_ros/trace.h"
+  #include "opener_ros/ports/POSIX/networkconfig.h"
+  #include "opener_ros/utils/doublylinkedlist.h"
+  #include "opener_ros/cip/cipconnectionobject.h"
+  #include "opener_ros/cip/appcontype.h"
+  #include "opener_ros/cip/cipidentity.h"
+  #include "opener_ros/ports/generic_networkhandler.h"
+}
 
 #include <ros/ros.h>
 
 #include "eip_device.h"
 
+#define DEVICE_SERIAL_NUM 123456789
+
+using namespace std;
 /******************************************************************************/
 /** @brief Signal handler function for ending stack execution
  *
@@ -20,6 +35,8 @@ void LeaveStack(int signal);
 /** @brief Flag indicating if the stack should end its execution
  */
 int g_end_stack = 0;
+
+EipDevice eipDevice;
 
 int main(int argc, char **argv)
 {
@@ -39,7 +56,7 @@ int main(int argc, char **argv)
     nh.getParam("debug", debug);
   }
 
-  ROS_INFO("Starting eip_device!");
+  ROS_INFO("Starting eip_device ...");
 
   ros::Time::init();
 
@@ -53,9 +70,7 @@ int main(int argc, char **argv)
   ROS_INFO_STREAM("Using Ethernet device: " << device);
 
 
-  EipDevice eipDevice;
-
-  ROS_INFO("Getting Ethernet port capabilities");
+  ROS_INFO("Getting Ethernet port capabilities ...");
 
   capabilities = cap_get_proc();
   if (NULL == capabilities) {
@@ -94,8 +109,8 @@ int main(int argc, char **argv)
 
   ConfigureMacAddress(device.c_str());
 
-  /* for a real device the serial number should be unique per device */
-  SetDeviceSerialNumber(123456789);
+  /* TODO: what should this be? and where should it be set? */
+  SetDeviceSerialNumber(DEVICE_SERIAL_NUM);
 
   /* unique_connection_id should be sufficiently random or incremented and stored
    *  in non-volatile memory each time the device boots.
@@ -117,6 +132,9 @@ int main(int argc, char **argv)
 
   //a topic to publish to for data FROM the PLC
   ros::Publisher eip_data_pub = nh.advertise<eip_device::EipDataFmPLC>("eip_data_fmplc", 1);
+
+  //a topic to publish to for data FROM the PLC
+  ros::Publisher eip_status_pub = nh.advertise<eip_device::EipDeviceStatus>("eip_status", 100);
 
   //a top to subcribe to for data TO the PLC
   ros::Subscriber eip_data_sub = nh.subscribe("eip_data_toplc", 1, &EipDevice::toplcCallback, &eipDevice);
@@ -140,6 +158,7 @@ int main(int argc, char **argv)
 
     //and publish
     eip_data_pub.publish(eipDevice.data_fmplc);
+    eip_status_pub.publish(eipDevice.device_status);
 
     ros::spinOnce();
 

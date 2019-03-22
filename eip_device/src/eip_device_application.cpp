@@ -9,11 +9,14 @@
 #include <stdbool.h>
 
 extern "C" {
-  #include "opener_api.h"
-  #include "appcontype.h"
-  #include "trace.h"
-  #include "cipidentity.h"
+  #include "opener_ros/opener_api.h"
+  #include "opener_ros/cip/appcontype.h"
+  #include "opener_ros/trace.h"
+  #include "opener_ros/cip/cipidentity.h"
+  #include "opener_ros/typedefs.h"
 }
+
+#include "eip_device.h"
 
 #define INPUT_ASSEMBLY_NUM                100 //0x064
 #define OUTPUT_ASSEMBLY_NUM               150 //0x096
@@ -25,6 +28,7 @@ extern "C" {
 /* global variables for demo application (4 assembly data fields)  ************/
 
 extern CipUint g_encapsulation_inactivity_timeout;
+extern EipDevice eipDevice;
 
 EipUint8 g_assembly_data064[32]; /* Input */
 EipUint8 g_assembly_data096[32]; /* Output */
@@ -79,9 +83,24 @@ void CheckIoConnectionEvent(unsigned int output_assembly_id,
                             IoConnectionEvent io_connection_event) {
   /* maintain a correct output state according to the connection state*/
 
+  eipDevice.device_status.status = io_connection_event;
+  switch(io_connection_event)
+  {
+    case kIoConnectionEventClosed:
+      eipDevice.device_status.description = "Device Closed";
+      break;
+    case kIoConnectionEventOpened:
+      eipDevice.device_status.description = "Device Opened";
+      break;
+    case kIoConnectionEventTimedOut:
+      eipDevice.device_status.description = "Device Timed Out";
+      break;
+    default:
+      eipDevice.device_status.description = "Device Status Not Defined";
+  }
+
   (void) output_assembly_id; /* suppress compiler warning */
   (void) input_assembly_id; /* suppress compiler warning */
-  (void) io_connection_event; /* suppress compiler warning */
 }
 
 EipStatus AfterAssemblyDataReceived(CipInstance *instance) {
@@ -94,7 +113,6 @@ EipStatus AfterAssemblyDataReceived(CipInstance *instance) {
        * Mirror it to the inputs */
       //memcpy( &g_assembly_data064[0], &g_assembly_data096[0],
       //        sizeof(g_assembly_data064) );
-      //Publish plc_raw_data
       break;
     case EXPLICT_ASSEMBLY_NUM:
       /* do something interesting with the new data from

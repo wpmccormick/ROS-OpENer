@@ -11,6 +11,7 @@ add_message_files(
   FILES
   EipDataFmPLC.msg
   EipDataToPLC.msg
+  EipDeviceStatus.msg
 )
 
 generate_messages()
