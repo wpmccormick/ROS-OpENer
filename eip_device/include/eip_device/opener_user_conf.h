@@ -27,7 +27,7 @@
 #include <sys/select.h>
 #include <assert.h>
 
-#include "opener_ros/typedefs.h"
+#include "typedefs.h"
 
 /** @brief Identity configuration of the device */
 #include "devicedata.h"

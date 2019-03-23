@@ -20,12 +20,12 @@ catkin_package(
   INCLUDE_DIRS
     include
     ${catkin_INCLUDE_DIRS}
-    ${opener_ros_INSTALL_PREFIX}/include/opener_ros  
-    ${opener_ros_INSTALL_PREFIX}/include/opener_ros/cip  
-    ${opener_ros_INSTALL_PREFIX}/include/opener_ros/enet_encap  
-    ${opener_ros_INSTALL_PREFIX}/include/opener_ros/ports  
-    ${opener_ros_INSTALL_PREFIX}/include/opener_ros/ports/POSIX  
-    ${opener_ros_INSTALL_PREFIX}/include/opener_ros/utils  
+    ${opener_ros_INSTALL_PREFIX}/include/OpENer  
+    ${opener_ros_INSTALL_PREFIX}/include/OpENer/cip  
+    ${opener_ros_INSTALL_PREFIX}/include/OpENer/enet_encap  
+    ${opener_ros_INSTALL_PREFIX}/include/OpENer/ports  
+    ${opener_ros_INSTALL_PREFIX}/include/OpENer/ports/POSIX  
+    ${opener_ros_INSTALL_PREFIX}/include/OpENer/utils  
   CATKIN_DEPENDS opener_ros roscpp message_runtime
   LIBRARIES eip_device
   )
@@ -34,12 +34,12 @@ include_directories(
   include 
   include/eip_device
   ${catkin_INCLUDE_DIRS}
-  ${opener_ros_INSTALL_PREFIX}/include/opener_ros  
-  ${opener_ros_INSTALL_PREFIX}/include/opener_ros/cip  
-  ${opener_ros_INSTALL_PREFIX}/include/opener_ros/enet_encap  
-  ${opener_ros_INSTALL_PREFIX}/include/opener_ros/ports  
-  ${opener_ros_INSTALL_PREFIX}/include/opener_ros/ports/POSIX  
-  ${opener_ros_INSTALL_PREFIX}/include/opener_ros/utils  
+  ${opener_ros_INSTALL_PREFIX}/include/OpENer  
+  ${opener_ros_INSTALL_PREFIX}/include/OpENer/cip  
+  ${opener_ros_INSTALL_PREFIX}/include/OpENer/enet_encap  
+  ${opener_ros_INSTALL_PREFIX}/include/OpENer/ports  
+  ${opener_ros_INSTALL_PREFIX}/include/OpENer/ports/POSIX  
+  ${opener_ros_INSTALL_PREFIX}/include/OpENer/utils  
   )
 
 add_library(eip_device src/eip_device.cpp)

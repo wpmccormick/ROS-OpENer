@@ -6,7 +6,7 @@
 #include<memory>
 
 extern "C" {
-  #include "opener_ros/typedefs.h"
+  #include "typedefs.h"
 }
 
 #include <eip_device/EipDataToPLC.h>

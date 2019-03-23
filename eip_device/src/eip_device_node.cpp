@@ -5,16 +5,16 @@
 #include <sys/capability.h>
 
 extern "C" {
-  #include "opener_ros/trace.h"
-  #include "opener_ros/opener_api.h"
-  #include "opener_ros/cip/cipcommon.h"
-  #include "opener_ros/trace.h"
-  #include "opener_ros/ports/POSIX/networkconfig.h"
-  #include "opener_ros/utils/doublylinkedlist.h"
-  #include "opener_ros/cip/cipconnectionobject.h"
-  #include "opener_ros/cip/appcontype.h"
-  #include "opener_ros/cip/cipidentity.h"
-  #include "opener_ros/ports/generic_networkhandler.h"
+  #include "trace.h"
+  #include "opener_api.h"
+  #include "cipcommon.h"
+  #include "trace.h"
+  #include "POSIX/networkconfig.h"
+  #include "doublylinkedlist.h"
+  #include "cipconnectionobject.h"
+  #include "appcontype.h"
+  #include "cipidentity.h"
+  #include "generic_networkhandler.h"
 }
 
 #include <ros/ros.h>

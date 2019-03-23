@@ -9,11 +9,11 @@
 #include <stdbool.h>
 
 extern "C" {
-  #include "opener_ros/opener_api.h"
-  #include "opener_ros/cip/appcontype.h"
-  #include "opener_ros/trace.h"
-  #include "opener_ros/cip/cipidentity.h"
-  #include "opener_ros/typedefs.h"
+  #include "opener_api.h"
+  #include "appcontype.h"
+  #include "trace.h"
+  #include "cipidentity.h"
+  #include "typedefs.h"
 }
 
 #include "eip_device.h"
