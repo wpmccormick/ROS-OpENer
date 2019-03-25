@@ -11,6 +11,7 @@ extern "C" {
 
 #include <eip_device/EipDataToPLC.h>
 #include <eip_device/EipDataFmPLC.h>
+#include <eip_device/EipConfig.h>
 #include <eip_device/EipDeviceStatus.h>
 
 
@@ -29,6 +30,7 @@ public:
   eip_device::EipDeviceStatus device_status;
   eip_device::EipDataToPLC data_toplc;
   eip_device::EipDataFmPLC data_fmplc;
+  eip_device::EipConfig data_config;
 };
 
 #endif // EIP_DEVICE_H

@@ -133,6 +133,9 @@ int main(int argc, char **argv)
   //a topic to publish to for data FROM the PLC
   ros::Publisher eip_data_pub = nh.advertise<eip_device::EipDataFmPLC>("eip_data_fmplc", 1);
 
+  //a topic to publish to for config FROM the PLC
+  ros::Publisher eip_config_pub = nh.advertise<eip_device::EipConfig>("eip_data_config", 1);
+
   //a topic to publish to for data FROM the PLC
   ros::Publisher eip_status_pub = nh.advertise<eip_device::EipDeviceStatus>("eip_status", 100);
 
@@ -156,8 +159,12 @@ int main(int argc, char **argv)
     //copy data from the output assembly array to the message topic
     eipDevice.data_fmplc.raw_plc_data.assign(g_assembly_data096, g_assembly_data096 + 32);
 
+    //copy data from the config assembly array to the message topic
+    eipDevice.data_config.raw_plc_data.assign(g_assembly_data097, g_assembly_data097 + 10);
+
     //and publish
     eip_data_pub.publish(eipDevice.data_fmplc);
+    eip_config_pub.publish(eipDevice.data_config);
     eip_status_pub.publish(eipDevice.device_status);
 
     ros::spinOnce();

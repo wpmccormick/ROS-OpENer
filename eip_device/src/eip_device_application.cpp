@@ -108,22 +108,9 @@ EipStatus AfterAssemblyDataReceived(CipInstance *instance) {
 
   /*handle the data received e.g., update outputs of the device */
   switch (instance->instance_number) {
-    case OUTPUT_ASSEMBLY_NUM:
-      /* Data for the output assembly has been received.
-       * Mirror it to the inputs */
-      //memcpy( &g_assembly_data064[0], &g_assembly_data096[0],
-      //        sizeof(g_assembly_data064) );
-      break;
-    case EXPLICT_ASSEMBLY_NUM:
-      /* do something interesting with the new data from
-       * the explicit set-data-attribute message */
-      break;
-    case CONFIG_ASSEMBLY_NUM:
-      /* Add here code to handle configuration data and check if it is ok
-       * The demo application does not handle config data.
-       * However in order to pass the test we accept any data given.
-       * EIP_ERROR
-       */
+    case OUTPUT_ASSEMBLY_NUM : break;
+    case EXPLICT_ASSEMBLY_NUM: break;
+    case CONFIG_ASSEMBLY_NUM :
       status = kEipStatusOk;
       break;
     default:
