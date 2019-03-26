@@ -9,9 +9,10 @@ find_package(catkin REQUIRED COMPONENTS opener_ros roscpp message_generation)
 
 add_message_files(
   FILES
-  EipDataFmPLC.msg
-  EipDataToPLC.msg
-  EipConfig.msg
+  EipDataAsmOut.msg
+  EipDataAsmIn.msg
+  EipDataAsmExp.msg
+  EipDataAsmCfg.msg
   EipDeviceStatus.msg
 )
 
